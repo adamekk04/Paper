@@ -2368,7 +2368,7 @@ public interface ItemType extends Keyed, Translatable, net.kyori.adventure.trans
 
     ItemType.Typed<ItemMeta> POPLAR_SAPLING = getItemType("poplar_sapling");
 
-    ItemType.Typed<ItemMeta> POPLAR_SHELF = getItemType("poplar_shelf");
+    ItemType.Typed<BlockStateMeta> POPLAR_SHELF = getItemType("poplar_shelf");
 
     ItemType.Typed<BlockStateMeta> POPLAR_SIGN = getItemType("poplar_sign");
 

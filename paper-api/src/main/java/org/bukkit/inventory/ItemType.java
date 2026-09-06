@@ -2358,7 +2358,7 @@ public interface ItemType extends Keyed, Translatable, net.kyori.adventure.trans
 
     ItemType.Typed<ItemMeta> POPLAR_FENCE_GATE = getItemType("poplar_fence_gate");
 
-    ItemType.Typed<ItemMeta> POPLAR_HANGING_SIGN = getItemType("poplar_hanging_sign");
+    ItemType.Typed<BlockStateMeta> POPLAR_HANGING_SIGN = getItemType("poplar_hanging_sign");
 
     ItemType.Typed<ItemMeta> POPLAR_LOG = getItemType("poplar_log");
 
@@ -2370,7 +2370,7 @@ public interface ItemType extends Keyed, Translatable, net.kyori.adventure.trans
 
     ItemType.Typed<ItemMeta> POPLAR_SHELF = getItemType("poplar_shelf");
 
-    ItemType.Typed<ItemMeta> POPLAR_SIGN = getItemType("poplar_sign");
+    ItemType.Typed<BlockStateMeta> POPLAR_SIGN = getItemType("poplar_sign");
 
     ItemType.Typed<ItemMeta> POPLAR_SLAB = getItemType("poplar_slab");
 

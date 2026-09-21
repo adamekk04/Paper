@@ -6,7 +6,6 @@
      public InteractionResult useOn(final UseOnContext context) {
 -        InteractionResult placeResult = super.useOn(context);
 +        // Paper start - Call PlayerBucketEmptyEvent on powder snow bucket
-+        System.out.println("DEBUG_POWDERSNOW_DEBUG");
          Player player = context.getPlayer();
 -        if (placeResult.consumesAction() && player != null) {
 -            player.setItemInHand(context.getHand(), BucketItem.getEmptySuccessItem(context.getItemInHand(), player));

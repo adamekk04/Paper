@@ -1,0 +1,61 @@
+--- a/net/minecraft/world/item/SolidBucketItem.java
++++ b/net/minecraft/world/item/SolidBucketItem.java
+@@ -24,13 +_,28 @@
+ 
+     @Override
+     public InteractionResult useOn(final UseOnContext context) {
+-        InteractionResult placeResult = super.useOn(context);
++        // Paper start - Call PlayerBucketEmptyEvent on powder snow bucket
++        System.out.println("DEBUG_POWDERSNOW_DEBUG");
+         Player player = context.getPlayer();
+-        if (placeResult.consumesAction() && player != null) {
+-            player.setItemInHand(context.getHand(), BucketItem.getEmptySuccessItem(context.getItemInHand(), player));
++        Level level = context.getLevel();
++        BlockPos clickedPos = context.getClickedPos();
++        net.minecraft.core.Direction direction = context.getClickedFace();
++        BlockPos targetPos = clickedPos.relative(direction);
++        BlockHitResult hitResult = new BlockHitResult(
++            context.getClickLocation(),
++            direction,
++            clickedPos,
++            context.isInside()
++        );
++
++        if (this.emptyContents(player, level, targetPos, hitResult)) {
++            if (player != null && !player.getAbilities().instabuild) {
++                player.setItemInHand(context.getHand(), BucketItem.getEmptySuccessItem(context.getItemInHand(), player));
++            }
++            return net.minecraft.world.InteractionResult.SUCCESS;
+         }
+-
+-        return placeResult;
++        return net.minecraft.world.InteractionResult.FAIL;
++        // Paper end - Call PlayerBucketEmptyEvent on powder snow bucket
+     }
+ 
+     @Override
+@@ -40,7 +_,23 @@
+ 
+     @Override
+     public boolean emptyContents(final @Nullable LivingEntity user, final Level level, final BlockPos pos, final @Nullable BlockHitResult hitResult) {
+-        if (level.isInWorldBounds(pos) && level.isEmptyBlock(pos)) {
++        // Paper start - Call PlayerBucketEmptyEvent on powder snow bucket
++        if (level.isInWorldBounds(pos) && level.isEmptyBlock(pos) || level.getBlockState(pos).canBeReplaced()) {
++            if (user instanceof Player player) {
++                BlockPos clickedPos = hitResult != null ? hitResult.getBlockPos() : pos;
++                net.minecraft.core.Direction direction = hitResult != null ? hitResult.getDirection() : net.minecraft.core.Direction.UP;
++                net.minecraft.world.InteractionHand hand = player.getUsedItemHand();
++                ItemStack itemStack = player.getItemInHand(hand);
++
++                org.bukkit.event.player.PlayerBucketEmptyEvent emptyEvent = org.bukkit.craftbukkit.event.CraftEventFactory.callPlayerBucketEmptyEvent(level, player, pos, clickedPos, direction, itemStack, hand);
++
++                if (emptyEvent.isCancelled()) {
++                    player.containerMenu.sendAllDataToRemote();
++                    return false;
++                }
++            }
++            // Paper end - Call PlayerBucketEmptyEvent on powder snow bucket
++
+             if (!level.isClientSide()) {
+                 level.setBlock(pos, this.getBlock().defaultBlockState(), Block.UPDATE_ALL);
+             }
